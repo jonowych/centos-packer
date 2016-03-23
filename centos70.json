@@ -1,0 +1,9 @@
+{
+    "_comment": "Build with `packer build -var-file=centos70.json centos-vbox.json`",
+    "iso_path": "file:///C:/Program%20Files/Git/_repos/_iso-images",
+    "iso_name": "CentOS-7-x86_64-Minimal.iso",
+    "iso_checksum": "154ba47b7a37e52e0100310c3aeb8f9d9daf4806",
+    "iso_checksum_type": "sha1",
+    "vm_name": "CentOS70-vbox",
+    "file_output": "./builds/centos70-vbox.box"
+}
