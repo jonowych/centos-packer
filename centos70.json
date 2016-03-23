@@ -5,5 +5,5 @@
     "iso_checksum": "783eef50e1fb91c78901d0421d8114a29b998478",
     "iso_checksum_type": "sha1",
     "vm_name": "CentOS70-vbox",
-    "file_output": "./builds/centos70-vbox.box"
+    "file_output": "./builds/centos70-base.box"
 }
