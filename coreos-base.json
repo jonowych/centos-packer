@@ -1,0 +1,71 @@
+{
+   "variables": {
+      "_comment": "Build with `packer build -var-file=centos-70.json centos-base.json`",
+      "iso_path": "file:///C:/Users/Jonathan/Downloads/_iso-images",
+      "iso_name": "coreos_production_iso_image-alpha.iso",
+      "iso_checksum": "2207f09699ee37e79c32aae972432059",
+      "iso_checksum_type": "md5",
+      "coreos_channel": "alpha",
+      "vm_name": "CoreOS-packer",
+      "file_output": "coreos-min.box"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Linux26_64",
+      "guest_additions_mode": "disable",
+      "boot_command":
+      [
+        "sudo -i<enter>",
+        "systemctl stop sshd.socket<enter>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.yml<enter>",
+        "coreos-install -d /dev/sda -C {{user `coreos_channel`}} -c install.yml<enter>",
+        "reboot<enter>"
+      ],
+      "boot_wait": "10s",
+      "http_directory": "files",
+      "headless": true,
+      "iso_url": "{{ user `iso_path` }}/{{ user `iso_name` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "ssh_pty" : "true",
+      "ssh_username": "core",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "600s",
+      "shutdown_command": "sudo -S shutdown -P now",
+      "vm_name": "{{ user `vm_name` }}",
+      "disk_size": 10240,
+      "vboxmanage": [
+           ["modifyvm", "{{.Name}}", "--memory", "1024"],
+           ["modifyvm", "{{.Name}}", "--cpus", "1" ],
+           ["modifyvm", "{{.Name}}", "--usb", "off"],
+           ["modifyvm", "{{.Name}}", "--audio", "none"]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "oem/",
+      "destination": "/home/core"
+    },
+    {
+      "type": "shell",
+      "environment_vars" : [],
+      "scripts": [
+        "scripts/oem.sh",
+        "scripts/cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "./packer_cache/{{ user `file_output` }}"
+        }
+      }
+    }
+  ]
+}
