@@ -2,12 +2,13 @@
   "builders": [
     {
       "type": "virtualbox-iso",
+      "guest_os_type": "RedHat_64",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `ks_cfg` }}<enter><wait>"
       ],
       "boot_wait": "10s",
       "http_directory": "http",
-      "guest_os_type": "RedHat_64",
+      "headless": true,
       "iso_url": "{{ user `iso_path` }}/{{ user `iso_name` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_checksum_type": "{{ user `iso_checksum_type` }}",
@@ -36,9 +37,6 @@
       "override": {
         "virtualbox-iso": {
           "scripts": [
-            "scripts/base.sh",
-            "scripts/vagrant.sh",
-            "scripts/virtualbox.sh",
             "scripts/cleanup.sh"
           ]
         }
@@ -50,7 +48,7 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "{{ user `file_output` }}"
+          "output": "./packer_cache/{{ user `file_output` }}"
         }
       }
     }
