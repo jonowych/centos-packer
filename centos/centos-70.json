@@ -1,0 +1,8 @@
+{
+    "iso_name": "CentOS-7-x86_64-Minimal.iso",
+    "iso_checksum": "783eef50e1fb91c78901d0421d8114a29b998478",
+    "iso_checksum_type": "sha1",
+    "ks_cfg": "ks70.cfg",
+    "vm_name": "CentOS7.0-packer",
+    "file_output": "centos70-min.box"
+}

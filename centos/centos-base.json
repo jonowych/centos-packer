@@ -1,0 +1,64 @@
+{
+   "variables": {
+      "iso_path": "file:///C:/Program Files/Git/_repos/_iso-images",
+      "output_path": "packer_cache"
+  },
+
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "RedHat_64",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `ks_cfg` }}<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "http_directory": "http",
+      "headless": true,
+      "iso_url": "{{ user `iso_path` }}/{{ user `iso_name` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "ssh_pty" : "true",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "1000s",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "vm_name": "{{ user `vm_name` }}",
+      "disk_size": 10240,
+      "vboxmanage": [
+           ["modifyvm", "{{.Name}}", "--memory", "1024"],
+           ["modifyvm", "{{.Name}}", "--cpus", "1" ],
+           ["modifyvm", "{{.Name}}", "--usb", "off"],
+           ["modifyvm", "{{.Name}}", "--audio", "none"]
+      ]
+    }
+  ],
+
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
+      "override": {
+        "virtualbox-iso": {
+          "scripts": [
+            "scripts/cleanup.sh"
+          ]
+        }
+      }
+    }
+  ],
+
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "{{ user `output_path` }}/{{ user `file_output` }}"
+        }
+      }
+    }
+  ]
+}

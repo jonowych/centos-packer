@@ -1,0 +1,9 @@
+{
+    "iso_name": "ubuntu-14.04.3-server-amd64.iso",
+    "iso_checksum": "0501c446929f713eb162ae2088d8dc8b6426224a",
+    "iso_checksum_type": "sha1",
+    "preseed": "preseed-1404.cfg",
+    "vm_name": "Ubuntu-14.04LTS-packer",
+    "host_name": "ubt1404",
+    "file_output": "ubuntu1404-min.box"
+}
